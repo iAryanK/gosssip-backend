@@ -6,6 +6,8 @@ import errorHandler from './app/common/middleware/error-handler.middleware'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import { Server } from 'socket.io'
+import { initPassport } from './app/common/services/passport-jwt.service'
+import router from './app/routes'
 
 loadConfig()
 const port = Number(process.env.PORT) ?? 3000
@@ -18,15 +20,9 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 const initApp = async () => {
-    // await initDB();
+    initPassport()
 
-    // initPassport();
-
-    // app.use('/api/v1', router)
-
-    app.get('/', (req, res) => {
-        res.send('Hello World!')
-    })
+    app.use('/api', router)
 
     app.use(errorHandler)
 
